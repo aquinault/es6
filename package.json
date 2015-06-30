@@ -1,0 +1,23 @@
+{
+  "name": "social",
+  "version": "1.0.0",
+  "description": "rest api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/babel-node ./dist/main.js"
+  },
+  "author": "Anthony Quinault",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.6.14"
+  },
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "browserify": "^10.2.4",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "restify": "^3.0.3",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
