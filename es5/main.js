@@ -65,7 +65,7 @@ server.get("/posts/", function (req, res, next) {
 	}))["catch"](onerror);
 });
 
-server.get("/posts/remove", function (req, res, next) {
+server.del("/posts/", function (req, res, next) {
 	(0, _co2["default"])(regeneratorRuntime.mark(function callee$1$0() {
 		var posts;
 		return regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
@@ -89,7 +89,7 @@ server.get("/posts/remove", function (req, res, next) {
 	}))["catch"](onerror);
 });
 
-server.get("/posts/add", function (req, res, next) {
+server.post("/posts/", function (req, res, next) {
 	(0, _co2["default"])(regeneratorRuntime.mark(function callee$1$0() {
 		var posts;
 		return regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {

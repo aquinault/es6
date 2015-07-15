@@ -44,24 +44,36 @@ export class Service1{
     *findPosts() {
 		var posts = yield Post.all();
 		console.log("Find Posts");
-		console.log(posts);
+		//console.log(posts);
 		return posts;  		
     }
     *removePosts() {
 		var posts = yield Post.remove();
 		console.log("Remove Posts");
-		console.log(posts);
+		//console.log(posts);
 		return posts;  		
     }
-    *addPost() {
-		var post = new Post({
+    *addPost(myPost) {
+		
+		//console.log(t1);
+
+		var post22 = new Post(myPost);		
+
+		var post11 = new Post({title: 'Californie',body: 'Mypost',author: {name: 'anthony'}});
+
+
+		/*var post = new Post({
 		    title: 'Node.js with --harmony rocks!',
 		    body: 'Long post body',
 		    author: {
 		        name: 'John Doe'
 		    }
 		});
-		let post2 = yield post.save();
+		*/
+		console.log(myPost);
+
+		//var post = new Post(myPost);		
+		let post2 = yield post22.save();
 		return post2;
 	
     }

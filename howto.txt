@@ -1,1 +1,4 @@
 mongod --dbpath d:\code\mongo\data
+
+DELETE
+curl -i -H "Accept: application/json" -X DELETE http://localhost:8080/posts/

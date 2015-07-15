@@ -41,7 +41,7 @@ server.get('/posts/', function (req, res, next) {
 	 }).catch(onerror); 	
 });
 
-server.get('/posts/remove', function (req, res, next) {
+server.del('/posts/', function (req, res, next) {
 	co(function *(){
 		let posts = yield service1.removePosts();	
 		res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
@@ -51,9 +51,11 @@ server.get('/posts/remove', function (req, res, next) {
 });
 
 
-server.get('/posts/add', function (req, res, next) {
+server.post('/posts/', function (req, res, next) {
 	co(function *(){
-		let posts = yield service1.addPost();	
+		//var newPost = req.body;
+		var newPost = JSON.stringify(req.body);
+		let posts = yield service1.addPost(newPost);	
 		res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
   		res.end(JSON.stringify(posts));
 	  	return next();
