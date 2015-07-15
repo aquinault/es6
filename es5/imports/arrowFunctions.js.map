@@ -1,0 +1,1 @@
+{"version":3,"sources":["imports/arrowFunctions.js"],"names":[],"mappings":";;AAAA,CAAC,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,GAAG,CAAE,UAAA,CAAC;SAAI,CAAC,GAAG,CAAC;CAAA,CAAC,CAAA","file":"imports/arrowFunctions.js","sourcesContent":["[1, 2, 3].map( x => x * 2)"],"sourceRoot":"D:\\code\\rest\\es6"}
