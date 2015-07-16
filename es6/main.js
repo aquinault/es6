@@ -43,8 +43,30 @@ server.get('/posts/', function (req, res, next) {
 	 }).catch(onerror); 	
 });
 
-server.del('/posts/', function (req, res, next) {
+server.get('/posts/:id', function (req, res, next) {
 	co(function *(){
+		UsersController.get(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+server.put('/posts/:id', function (req, res, next) {
+	co(function *(){
+		UsersController.update(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+
+server.del('/posts/', function (req, res, next) {
+	co(function *(){		
+		UsersController.removeAll(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+server.del('/posts/:id', function (req, res, next) {
+	co(function *(){		
 		UsersController.remove(req, res, next);
 		return next();
 	 }).catch(onerror); 	
