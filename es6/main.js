@@ -8,7 +8,7 @@ import config from "./imports/conf/config";
 // Mongoose
 // ---------------------------------------------------------------
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(config.mongo_url);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -49,6 +49,7 @@ import UserController from "./imports/controllers/usersController";
 // Create admin user
 server.post('/auth/setup/', (req, res, next) => {
 	co(function *(){
+		req.body = {};
 		req.body.username = 'admin';
 		req.body.password = 'admin';
 		req.body.email = 'admin@admin.fr';
