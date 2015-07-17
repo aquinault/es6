@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "startOld": "babel-node --harmony ./es6/main.js",
-    "start" : "nodemon --exec babel-node --harmony ./es6/main.js"
+    "start": "nodemon --exec babel-node --harmony ./es6/main.js"
   },
   "author": "Anthony Quinault",
   "license": "ISC",
@@ -15,7 +15,8 @@
     "co": "^4.6.0",
     "jsonwebtoken": "^5.0.4",
     "mongoose": "^4.0.7",
-    "restify-jwt": "^0.2.0"
+    "restify-jwt": "^0.2.0",
+    "ua-parser-js": "^0.7.7"
   },
   "devDependencies": {
     "babelify": "^6.1.2",
