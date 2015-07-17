@@ -46,9 +46,22 @@ var jwttoken = require('jsonwebtoken');
 // ---------------------------------------------------------------
 import UserController from "./imports/controllers/usersController";
 
+// Create admin user
+server.post('/auth/setup/', (req, res, next) => {
+	co(function *(){
+		req.body.username = 'admin';
+		req.body.password = 'admin';
+		req.body.email = 'admin@admin.fr';
+		req.body.admin = true; // Admin privilege
+		UserController.create(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
 // Create user
 server.post('/auth/user/', (req, res, next) => {
 	co(function *(){
+		req.body.admin = false; // User privilege
 		UserController.create(req, res, next);
 		return next();
 	 }).catch(onerror); 	
@@ -77,6 +90,29 @@ server.post('/auth/login/', (req, res, next) => {
 		return next();
 	 }).catch(onerror); 	
 });
+
+// Get Users
+server.get('/auth/users/', (req, res, next) => {
+	co(function *(){
+		UserController.list(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+server.get('/auth/users/byId/:id', (req, res, next) => {
+	co(function *(){
+		UserController.getById(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+server.get('/auth/users/byUsername/:username', (req, res, next) => {
+	co(function *(){
+		UserController.getByUsername(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
 
 // Verify and Decode Token
 server.post('/auth/token/decode/', (req, res) => {

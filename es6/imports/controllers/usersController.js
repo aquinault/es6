@@ -7,7 +7,7 @@ import config from "../conf/config";
 let UserController = {};
 
 UserController.create = (req, res, next) => {
-  let user = new User({username: req.body.username, password: req.body.password});
+  let user = new User({username: req.body.username, password: req.body.password, email: req.body.email, admin: req.body.admin});
   Co(function* () {
     yield user.save();
     console.log('user saved');
@@ -29,16 +29,38 @@ UserController.get = (req, res, next) => {
     let token = jwttoken.sign(results, secret);
 
     console.log('user get');
-    //console.log(results);
-
-    //res.send(results);
-    res.send({'username': results.username, 'id' : results._id, 'token': token});
+    res.send({'username': results.username, 'id' : results._id, 'email': results.email, 'admin': results.admin, 'token': token});
   }).then(() => {
     res.send(201)
   }, (err) => {
     res.send(422, err);
   }).then(next);
 };
+
+UserController.getById = (req, res, next) => {
+  Co(function* () {
+    let results = yield User.findOne({_id: req.params.id}).exec();
+    console.log('user getById');
+    res.send(results);
+  }).then(() => {
+    res.send(201)
+  }, (err) => {
+    res.send(422, err);
+  }).then(next);
+};
+
+UserController.getByUsername = (req, res, next) => {
+  Co(function* () {
+    let results = yield User.findOne({username: req.params.username}).exec();
+    console.log('user getByUsername');
+    res.send(results);
+  }).then(() => {
+    res.send(201)
+  }, (err) => {
+    res.send(422, err);
+  }).then(next);
+};
+
 
 UserController.remove = (req, res, next) => {
   Co(function* () {
