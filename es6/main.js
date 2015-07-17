@@ -2,8 +2,7 @@
 
 import Api from "./imports/Api";
 import co from 'co';
-
-import UsersController from "./imports/controllers/usersController";
+import config from "./imports/conf/config";
 
 
 // Mongoose
@@ -43,8 +42,70 @@ var jwt = require('restify-jwt');
 var jwttoken = require('jsonwebtoken');
 
 
-// API AUTH
+// API AUTHENTIFICATION
 // ---------------------------------------------------------------
+import UserController from "./imports/controllers/usersController";
+
+// Create user
+server.post('/auth/user/', (req, res, next) => {
+	co(function *(){
+		UserController.create(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+// Delete user
+server.del('/auth/user/:id', (req, res, next) => {
+	co(function *(){
+		UserController.remove(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+// Update User
+server.put('/auth/users/:id', (req, res, next) => {
+	co(function *(){
+		UserController.update(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+// Login User
+server.post('/auth/login/', (req, res, next) => {
+	co(function *(){
+		UserController.get(req, res, next);
+		return next();
+	 }).catch(onerror); 	
+});
+
+// Verify and Decode Token
+server.post('/auth/token/decode/', (req, res) => {
+	let secret = config.secret;
+	let decoded = jwttoken.decode(req.body.token, {complete: true});
+	//console.log(decoded);
+	res.send(decoded);
+	
+    return next();
+});
+
+// Decode Token
+server.post('/auth/token/verify/', (req, res) => {
+	let secret = config.secret;
+	let decoded = jwttoken.verify(req.body.token, secret, (err, decoded) => {
+		if(err) {
+			console.log('Token invalid');
+			res.send(422, err);
+		} else {
+			console.log('Token valid');
+			//console.log(decoded);
+			res.send(decoded);
+		    return next();	
+		}
+	});	
+});
+
+
+/*
 server.get('/token', (req, res) => {
 	var secret = 'shhhhhhared-secret';
 	var token = jwttoken.sign({foo: 'bar', admin: true}, secret);
@@ -52,9 +113,9 @@ server.get('/token', (req, res) => {
     res.send(token);
     return next();
   });
+*/
 
-
-server.get('/protected', jwt({secret: 'shhhhhhared-secret'}), function(req, res) {
+server.get('/protected', jwt({secret: config.secret}), function(req, res) {
 	/* req.headers.authorization = 'Bearer ' + token;*/
 	console.log(req.user);
 	res.send(req.user);
@@ -63,25 +124,28 @@ server.get('/protected', jwt({secret: 'shhhhhhared-secret'}), function(req, res)
   });
 
 
+
 // API POSTS
 // ---------------------------------------------------------------
+import PostsController from "./imports/controllers/postsController";
+
 server.get('/posts/', (req, res, next) => {
 	co(function *(){
-		UsersController.list(req, res, next);
+		PostsController.list(req, res, next);
 		return next();
 	 }).catch(onerror); 	
 });
 
 server.get('/posts/:id', (req, res, next) => {
 	co(function *(){
-		UsersController.get(req, res, next);
+		PostsController.get(req, res, next);
 		return next();
 	 }).catch(onerror); 	
 });
 
 server.put('/posts/:id', (req, res, next) => {
 	co(function *(){
-		UsersController.update(req, res, next);
+		PostsController.update(req, res, next);
 		return next();
 	 }).catch(onerror); 	
 });
@@ -89,14 +153,14 @@ server.put('/posts/:id', (req, res, next) => {
 
 server.del('/posts/', (req, res, next) => {
 	co(function *(){		
-		UsersController.removeAll(req, res, next);
+		PostsController.removeAll(req, res, next);
 		return next();
 	 }).catch(onerror); 	
 });
 
 server.del('/posts/:id', (req, res, next) => {
 	co(function *(){		
-		UsersController.remove(req, res, next);
+		PostsController.remove(req, res, next);
 		return next();
 	 }).catch(onerror); 	
 });
@@ -104,7 +168,7 @@ server.del('/posts/:id', (req, res, next) => {
 
 server.post('/posts/', (req, res, next) => {
 	co(function *(){
-		UsersController.create(req, res, next);
+		PostsController.create(req, res, next);
 		return next();
 	 }).catch(onerror); 	
 });
