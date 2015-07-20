@@ -59,6 +59,15 @@ let tokenApi = new TokenApi(server);
 import PostsApi from "./imports/routes/postsApi";
 let postsApi = new PostsApi(server);
 
+// API SITES
+// ---------------------------------------------------------------
+import SitesApi from "./imports/routes/sitesApi";
+let sitesApi = new SitesApi(server);
+
+// API HITS
+// ---------------------------------------------------------------
+import HitsApi from "./imports/routes/hitsApi";
+let hitsApi = new HitsApi(server);
 
 
 /*server.get('/echo2/:name', (req, res, next) => {
