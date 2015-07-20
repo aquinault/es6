@@ -14,8 +14,8 @@ var mongoose = require('mongoose');
 var hitSchema = mongoose.Schema({
     id2 : { type: String, required: true, index: true }, 
     browser: [mongoose.Schema.Types.Mixed],
-    browser_name : { type: String },
-    platform : { type: String },
+    //browser_name : { type: String },
+    platform : [mongoose.Schema.Types.Mixed],
     visit: { type: Number},
     site_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     user_id: { type: mongoose.Schema.Types.ObjectId, required: true },

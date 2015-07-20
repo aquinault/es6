@@ -11,7 +11,8 @@ let SitesController = {};
 SitesController.updateTracking = (req, res, next) => {
   Co(function* () {
     //{new: true} option return the modified object
-    let data = {
+    
+    /*let data = {
       id2: req.params.site_id,
       browser_name: 'browser',
       platform: 'platform',
@@ -19,6 +20,8 @@ SitesController.updateTracking = (req, res, next) => {
       user_id: new mongoose.Types.ObjectId(123),
     };
     console.log(data);
+    */
+
     console.log({id2: req.params.site_id});
 
     var UAParser = require('ua-parser-js');
@@ -28,11 +31,29 @@ SitesController.updateTracking = (req, res, next) => {
 
     let resultParser = parser.setUA(ua).getResult();    
 
+
+    // Get current year, month, day
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    console.log(year);
+    console.log(month);
+    console.log(day);
+    // And update id2 = user_id:year
+
+    // update id2 = user_id:month
+
+    // update id2 = user_id:day
+
+
     var update = {};  
     update['$inc'] = {};
     update['$inc']['browser.'+ resultParser.browser.name +'.' + resultParser.browser.major] = 1;
-
-    //let results = yield Hit.update( {id2: req.params.site_id} ,{$inc: {'browser.Chrome.37': 1}}, {upsert: true}).exec();
+    update['$inc']['platform.'+ resultParser.os.name +'.' + resultParser.os.version] = 1;
     let results = yield Hit.update( {id2: req.params.site_id} ,update, {upsert: true}).exec();
 
     console.log('hit get');
