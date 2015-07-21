@@ -20,6 +20,15 @@ class SitesApi{
              }).catch(this.onerror);     
         });
 
+        server.get('/hits/:site_id/traffic/:date', (req, res, next) => {
+            co(function *(){
+                hitsController.getTraffic(req, res, next);
+                return next();
+             }).catch(this.onerror);     
+        });
+
+
+
         server.post('/hits/:id2', (req, res, next) => {
             co(function *(){
                 hitsController.update(req, res, next);
