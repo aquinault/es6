@@ -20,8 +20,8 @@ var hitSchema = mongoose.Schema({
     p : [mongoose.Schema.Types.Mixed], // Platforms
     site_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
-    created_at: { type: Date },
-	updated_at: { type: Date }
+    created_at: { type: Date, required: true },
+    updated_at: { type: Date, required: true }
 })
 
 hitSchema.set('toJSON', {
@@ -33,7 +33,7 @@ hitSchema.set('toJSON', {
 }); 
 
 // on every save, add the date
-hitSchema.pre('save', function(next) {
+/*hitSchema.pre('save', function(next) {
 
 console.log('pre save');
 
@@ -49,6 +49,26 @@ console.log('pre save');
 
   next();
 });
+
+// on every update, udate the date
+hitSchema.pre('update', function(next) {
+
+console.log('pre update');
+
+  // get the current date
+  var currentDate = new Date();
+  
+  // change the updated_at field to current date
+  this.updated_at = currentDate;
+
+  // if created_at doesn't exist, add to that field
+  if (!this.created_at)
+    this.created_at = currentDate;
+
+  next();
+});
+*/
+
 
 var Hit = mongoose.model('Hit', hitSchema)
 export default Hit;

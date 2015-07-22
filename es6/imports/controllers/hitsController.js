@@ -42,7 +42,6 @@ SitesController.updateTracking = (req, res, next) => {
       min : (date.getMinutes() < 10 ? "0" : "") + date.getMinutes()
     }
     
-
     console.log(currentTime);
     // And update id2 = user_id:year
     let update = {};  
@@ -51,6 +50,9 @@ SitesController.updateTracking = (req, res, next) => {
     update['$inc']['b.'+ resultParser.browser.name +'.' + resultParser.browser.major] = 1;
     update['$inc']['p.'+ resultParser.os.name +'.' + resultParser.os.version] = 1;
     update['$set'] = {};
+    update['$set']['updated_at'] = date;
+    update['$setOnInsert'] = {};
+    update['$setOnInsert']['created_at'] = date;
 
     update['$set']['date'] = currentTime.year;
     let id2 = req.params.site_id + ':' + currentTime.year;
@@ -77,7 +79,7 @@ SitesController.updateTracking = (req, res, next) => {
     results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
 
 
-    console.log('hit get');
+    console.log('hit update');
     res.send(results);
   }).then(() => {
     res.send(201)
