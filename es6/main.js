@@ -1,30 +1,23 @@
-//main.js
-
-import Api from "./imports/Api";
-import co from 'co';
-import config from "./imports/conf/config";
-
+// main.js
+import config from './imports/conf/config';
 
 // Mongoose
 // ---------------------------------------------------------------
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect(config.mongo_url);
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
-  // yay!
+/* db.once('open', function () {
 });
-
-
+*/
 // Restify
 // ---------------------------------------------------------------
-var restify = require('restify');
+const restify = require('restify');
 
-
-var server = restify.createServer({
-  name: 'myapp',
-  version: '1.0.0'
+const server = restify.createServer({
+	name: 'myapp',
+	version: '1.0.0'
 });
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
@@ -35,42 +28,41 @@ server.listen(8080, () => {
 	console.log('%s listening at %s', server.name, server.url);
 });
 
-process.on( 'SIGINT', () => {
-	console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
+process.on('SIGINT', () => {
+	console.log('\nGracefully shutting down from SIGINT (Ctrl-C)');
 	// Disconnect Mongo
-	//service1.exit();
+	// service1.exit();
 	// some other closing procedures go here
-	process.exit( );
-})
-
+	process.exit();
+});
 
 // API USERS AND AUTHENTIFICATION
 // ---------------------------------------------------------------
-import UsersApi from "./imports/routes/usersApi";
+import UsersApi from './imports/routes/usersApi';
 let usersApi = new UsersApi(server);
 
 // API TOKEN
 // ---------------------------------------------------------------
-import TokenApi from "./imports/routes/tokenApi";
+import TokenApi from './imports/routes/tokenApi';
 let tokenApi = new TokenApi(server);
 
 // API POSTS
 // ---------------------------------------------------------------
-import PostsApi from "./imports/routes/postsApi";
+import PostsApi from './imports/routes/postsApi';
 let postsApi = new PostsApi(server);
 
 // API SITES
 // ---------------------------------------------------------------
-import SitesApi from "./imports/routes/sitesApi";
+import SitesApi from './imports/routes/sitesApi';
 let sitesApi = new SitesApi(server);
 
 // API HITS
 // ---------------------------------------------------------------
-import HitsApi from "./imports/routes/hitsApi";
+import HitsApi from './imports/routes/hitsApi';
 let hitsApi = new HitsApi(server);
 
 
-/*server.get('/echo2/:name', (req, res, next) => {
+/* server.get('/echo2/:name', (req, res, next) => {
 	res.send(req.params); 
 	return next();
-});*/
+}); */

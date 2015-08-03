@@ -1,7 +1,7 @@
 'use strict';
 
 import User from '../models/users';
-import Co from 'co';
+import co from 'co';
 import config from "../conf/config";
 
 let UserController = {};
@@ -75,52 +75,28 @@ UserController.remove = (req, res, next) => {
 };
 
 
-UserController.list = (req, res) => {
-  Co(function* () {
-    let results = yield User.find().exec();
+UserController.list = () => {
+  var fn = co(function* () {
     console.log('users list');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
+    let results = yield User.find().exec();   
+    return results;
   });
+  return fn;
 };
 
-/*
-UserController.list = (req, res, next) => {
-  Co(function* () {
-    let results = yield User.find().exec();
-    console.log('users list');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
-};
-*/
+UserController.update = (id, user) => {
+  console.log("aaa");
+  var fn = co(function* () {
+    let newUser = {};
+    newUser.username = user.username;
+    newUser.email = user.email;
 
-//
-UserController.update = (req, res) => {
-  Co(function* () {
-    //{new: true} option return the modified object
-    let newObject = Object.assign({}, req.body/*, {admin:false}*/);
-    delete newObject.created_at;
-    delete newObject.updated_at;
-    delete newObject.admin;
-    delete newObject.id;
-
-    let results = yield User.findByIdAndUpdate(req.params.id, { $set: newObject}, {new: true}).exec();
-    return (results)
-  }).then((results) => {
-    console.log('user update OK');
-    res.send(results);
-  }, (err) => {
-    console.log('user update KO');
-    res.send(422, err);
-  });
+    let results = yield User.findByIdAndUpdate(id, { $set: newUser}, {new: true}).exec();
+    return results;   
+  })
+  return fn;
 };
+
 
 
 UserController.removeAll = (req, res, next) => {

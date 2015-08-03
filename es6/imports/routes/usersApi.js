@@ -14,13 +14,23 @@ class UsersApi{
 
         // Get Users
         server.get('/auth/users/', (req, res, next) => {
-            userController.list(req, res);
-            return next();
+//            userController.list(req, res);
+//            return next();
 /*            co(function *(){
                 userController.list(req, res, next);
                 return next();
              }).catch(this.onerror);     
  */
+
+            let fn = userController.list();
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+
+            return next();
+
         });
 
         // Get User by id
@@ -71,9 +81,23 @@ class UsersApi{
 
         // Update User
         server.put('/auth/users/:id', (req, res, next) => {           
-            userController.update(req, res);
+            let fn = userController.update(req.params.id, req.body);
+            console.log(fn);
+            fn.then((results) => {
+                console.log('user update OK');
+                res.send(results);
+            }, (err) => {
+                console.log('user update KO');
+                res.send(422, err);
+            });
+
             return next();
         });
+        /*
+        server.put('/auth/users/:id', (req, res, next) => {           
+            userController.update(req, res);
+            return next();
+        }); */
 
         // Login User
         server.post('/auth/login/', (req, res, next) => {
