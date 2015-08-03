@@ -14,10 +14,13 @@ class UsersApi{
 
         // Get Users
         server.get('/auth/users/', (req, res, next) => {
-            co(function *(){
+            userController.list(req, res);
+            return next();
+/*            co(function *(){
                 userController.list(req, res, next);
                 return next();
              }).catch(this.onerror);     
+ */
         });
 
         // Get User by id
@@ -67,11 +70,9 @@ class UsersApi{
         });
 
         // Update User
-        server.put('/auth/users/:id', (req, res, next) => {
-            co(function *(){
-                userController.update(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+        server.put('/auth/users/:id', (req, res, next) => {           
+            userController.update(req, res);
+            return next();
         });
 
         // Login User

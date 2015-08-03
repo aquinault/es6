@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var userSchema = mongoose.Schema({
 	username: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true },
-	email: { type: String, required: false },
+    email: { type: String, required: false },
     admin: { type: Boolean, default: false },
     created_at: Date,
 	updated_at: Date
@@ -23,6 +23,7 @@ userSchema.set('toJSON', {
 
 // on every save, add the date
 userSchema.pre('save', function(next) {
+  console.log('save');
   // get the current date
   var currentDate = new Date();
   
@@ -35,6 +36,24 @@ userSchema.pre('save', function(next) {
 
   next();
 });
+
+userSchema.pre('findOneAndUpdate', function(next) {
+  console.log('pre findOneAndUpdate');
+  //this.updated_at = Date.now();
+  this.findOneAndUpdate({}, { updated_at: Date.now() });
+  next();
+});
+
+userSchema.pre('update', function() {
+  console.log('pre update');
+  this.updated_at = Date.now();
+  next();
+});
+
+userSchema.post('update', function() {
+  console.log('post update');
+});
+
 
 /*
 UserSchema.pre(save, function(next) {

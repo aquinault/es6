@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "startOld": "babel-node --harmony ./es6/main.js",
-    "start": "nodemon --exec babel-node --harmony ./es6/main.js"
+    "start": "nodemon --exec babel-node --harmony ./es6/main.js",
+    "initdb": "babel-node --harmony ./es6/imports/conf/createUsers.js"
   },
   "author": "Anthony Quinault",
   "license": "ISC",

@@ -9,7 +9,7 @@ let UserController = {};
 UserController.create = (req, res, next) => {
   let user = new User({username: req.body.username, password: req.body.password, email: req.body.email, admin: req.body.admin});
   Co(function* () {
-    yield user.save();
+    yield user.save().exec();
     console.log('user saved');
     res.send(user);
   }).then(() => {
@@ -75,6 +75,19 @@ UserController.remove = (req, res, next) => {
 };
 
 
+UserController.list = (req, res) => {
+  Co(function* () {
+    let results = yield User.find().exec();
+    console.log('users list');
+    res.send(results);
+  }).then(() => {
+    res.send(201)
+  }, (err) => {
+    res.send(422, err);
+  });
+};
+
+/*
 UserController.list = (req, res, next) => {
   Co(function* () {
     let results = yield User.find().exec();
@@ -86,19 +99,27 @@ UserController.list = (req, res, next) => {
     res.send(422, err);
   }).then(next);
 };
+*/
 
 //
-UserController.update = (req, res, next) => {
+UserController.update = (req, res) => {
   Co(function* () {
     //{new: true} option return the modified object
-    let results = yield User.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name }}, {new: true}).exec();
-    console.log('user get');
+    let newObject = Object.assign({}, req.body/*, {admin:false}*/);
+    delete newObject.created_at;
+    delete newObject.updated_at;
+    delete newObject.admin;
+    delete newObject.id;
+
+    let results = yield User.findByIdAndUpdate(req.params.id, { $set: newObject}, {new: true}).exec();
+    return (results)
+  }).then((results) => {
+    console.log('user update OK');
     res.send(results);
-  }).then(() => {
-    res.send(201)
   }, (err) => {
+    console.log('user update KO');
     res.send(422, err);
-  }).then(next);
+  });
 };
 
 
