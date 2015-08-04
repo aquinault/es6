@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 
+
 /*var bcrypt = require('bcrypt'),
     SALT_WORK_FACTOR = 10;*/
 
@@ -23,7 +24,7 @@ userSchema.set('toJSON', {
 
 // on every save, add the date
 userSchema.pre('save', function(next) {
-  console.log('save');
+  //console.log('save');
   // get the current date
   var currentDate = new Date();
   
@@ -38,20 +39,20 @@ userSchema.pre('save', function(next) {
 });
 
 userSchema.pre('findOneAndUpdate', function(next) {
-  console.log('pre findOneAndUpdate');
+  //console.log('pre findOneAndUpdate');
   //this.updated_at = Date.now();
   this.findOneAndUpdate({}, { updated_at: Date.now() });
   next();
 });
 
 userSchema.pre('update', function() {
-  console.log('pre update');
+  //console.log('pre update');
   this.updated_at = Date.now();
   next();
 });
 
 userSchema.post('update', function() {
-  console.log('post update');
+  //console.log('post update');
 });
 
 
