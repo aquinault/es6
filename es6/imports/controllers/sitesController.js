@@ -18,7 +18,7 @@ SitesController.create = (name, user_id) => {
 
 SitesController.list = (user_id) => {
   let fn = co(function* () {
-    let results = yield Site.find({user_id: req.params.user_id}).exec();
+    let results = yield Site.find({user_id: user_id}).exec();
     console.log('sites list');
     return results;
   });

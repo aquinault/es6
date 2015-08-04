@@ -1,7 +1,7 @@
 'use strict';
 
 import mongoose from 'mongoose';
-import Hit from '../models/Hits';
+import Hit from '../models/hits';
 import co from 'co';
 
 let SitesController = {};
@@ -28,26 +28,42 @@ SitesController.updateTracking = (req) => {
       min : (date.getMinutes() < 10 ? "0" : "") + date.getMinutes()
     }
     
-    console.log(currentTime);
+    console.log('a');
+    // console.log(currentTime);
     // And update id2 = user_id:year
     let update = {};  
     update['$inc'] = {};
     update['$inc']['views'] = 1;
     update['$inc']['b.'+ resultParser.browser.name +'.' + resultParser.browser.major] = 1;
-    update['$inc']['p.'+ resultParser.os.name +'.' + resultParser.os.version] = 1;
+    update['$inc']['p.'+ resultParser.os.name.replace(' ', '_') +'.' + resultParser.os.version] = 1;
     update['$set'] = {};
     update['$set']['updated_at'] = date;
     update['$setOnInsert'] = {};
     update['$setOnInsert']['created_at'] = date;
-
     update['$set']['date'] = currentTime.year;
+
+    console.log('b');
+
+    console.log('b1');
     let id2 = req.params.site_id + ':' + currentTime.year;
+    console.log('b2');
+    console.log(id2);
+    console.log(update);
+    console.log(resultParser.os);
+
     let results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
+
+    console.log('c');
 
     // update id2 = user_id-year-month
     update['$set']['date'] = currentTime.year + '-' + currentTime.month;
     id2 = id2 + '-' + currentTime.month;
+
+    console.log('c1');
+
     results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
+
+    console.log('d');
 
     // update id2 = user_id:year-month-day
     update['$set']['date'] = currentTime.year + '-' + currentTime.month + '-' + currentTime.day;

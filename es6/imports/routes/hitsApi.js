@@ -17,6 +17,7 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
+                console.log(err);
                 res.send(422, err);
             });
             return next();
