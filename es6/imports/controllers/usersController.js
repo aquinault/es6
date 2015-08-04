@@ -6,77 +6,51 @@ import config from "../conf/config";
 
 let UserController = {};
 
-UserController.create = (req, res, next) => {
-  let user = new User({username: req.body.username, password: req.body.password, email: req.body.email, admin: req.body.admin});
-  Co(function* () {
+UserController.create = (username, password, email, admin) => {
+  let user = new User({username: username, password: password, email: email, admin: admin});
+  let fn = co(function* () {
     yield user.save().exec();
     console.log('user saved');
-    res.send(user);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
+    return user;
+  });
+  return fn;
 };
 
-UserController.get = (req, res, next) => {
-  Co(function* () {
-    let results = yield User.findOne({username: req.body.username, password: req.body.password}).exec();
+UserController.get = (username, password) => {
+  let fn = co(function* () {
+    let results = yield User.findOne({username: username, password: password}).exec();
 
     // Generate Token
     let jwttoken = require('jsonwebtoken');    
     let secret = config.secret;
     let token = jwttoken.sign(results, secret);
 
-    console.log('user get');
-    res.send({'username': results.username, 'id' : results._id, 'email': results.email, 'admin': results.admin, 'token': token});
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
+    console.log('user get');    
+    return {'username': results.username, 'id' : results._id, 'email': results.email, 'admin': results.admin, 'token': token};
+  });
+  return fn;
 };
 
-UserController.getById = (req, res, next) => {
-  Co(function* () {
-    let results = yield User.findOne({_id: req.params.id}).exec();
+UserController.getById = (id) => {
+  let fn = co(function* () {
+    let results = yield User.findOne({_id: id}).exec();
     console.log('user getById');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
+    return results;
+  });
+  return fn;
 };
 
-UserController.getByUsername = (req, res, next) => {
-  Co(function* () {
-    let results = yield User.findOne({username: req.params.username}).exec();
+UserController.getByUsername = (username) => {
+  let fn = co(function* () {
+    let results = yield User.findOne({username: username}).exec();
     console.log('user getByUsername');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
+    return results;
+  });
+  return fn;
 };
-
-
-UserController.remove = (req, res, next) => {
-  Co(function* () {
-    let results = yield User.remove({'_id': req.params.id}).exec();
-    console.log('users removed');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
-};
-
 
 UserController.list = () => {
-  var fn = co(function* () {
+  let fn = co(function* () {
     console.log('users list');
     let results = yield User.find().exec();   
     return results;
@@ -85,42 +59,33 @@ UserController.list = () => {
 };
 
 UserController.update = (id, user) => {
-  console.log("aaa");
-  var fn = co(function* () {
+  let fn = co(function* () {
     let newUser = {};
     newUser.username = user.username;
     newUser.email = user.email;
 
     let results = yield User.findByIdAndUpdate(id, { $set: newUser}, {new: true}).exec();
     return results;   
-  })
+  });
   return fn;
 };
 
-
-
-UserController.removeAll = (req, res, next) => {
-  Co(function* () {
+UserController.removeAll = () => {
+  let fn = co(function* () {
     let results = yield User.remove().exec();
     console.log('users removed');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
+    return results;
+  });
+  return fn;
 };
 
-UserController.remove = (req, res, next) => {
-  Co(function* () {
-    let results = yield User.remove({'_id': req.params.id}).exec();
+UserController.remove = (id) => {
+  let fn = co(function* () {
+    let results = yield User.remove({'_id': id}).exec();
     console.log('users removed');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
+    return results;
+  });
+  return fn;
 };
 
 
