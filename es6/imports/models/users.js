@@ -14,12 +14,12 @@ var userSchema = mongoose.Schema({
 })
 
 userSchema.set('toJSON', {
-     transform: function (doc, ret, options) {
-         ret.id = ret._id;
-         delete ret._id;
-         delete ret.__v;
-         delete ret.password;
-     }
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.password;
+  }
 }); 
 
 // on every save, add the date
@@ -50,11 +50,6 @@ userSchema.pre('update', function() {
   this.updated_at = Date.now();
   next();
 });
-
-userSchema.post('update', function() {
-  //console.log('post update');
-});
-
 
 /*
 UserSchema.pre(save, function(next) {

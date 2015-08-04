@@ -1,5 +1,4 @@
 import restify from 'restify';
-import co from 'co';
 import config from '../conf/config';
 import sitesController from '../controllers/sitesController';
 
@@ -13,51 +12,65 @@ class SitesApi{
         console.error(err.stack);
     }
     init(server){
-        server.get('/sites/', (req, res, next) => {
-            co(function *(){
-                sitesController.list(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+        server.get('/sites/byUserId/:user_id', (req, res, next) => {
+            let fn = sitesController.list(req.params.user_id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();            
         });
 
         server.get('/sites/:id', (req, res, next) => {
-            co(function *(){
-                sitesController.get(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = sitesController.get(req.params.id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();            
         });
 
         server.put('/sites/:id', (req, res, next) => {
-            co(function *(){
-                sitesController.update(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = sitesController.update(req.params.id, req.body);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();            
         });
 
-
         server.del('/sites/', (req, res, next) => {
-            co(function *(){        
-                sitesController.removeAll(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = sitesController.removeAll();
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();            
         });
 
         server.del('/sites/:id', (req, res, next) => {
-            co(function *(){        
-                sitesController.remove(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = sitesController.remove(id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();            
         });
-
 
         server.post('/sites/', (req, res, next) => {
-            co(function *(){
-                sitesController.create(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = sitesController.create(req.body.name, req.body.user_id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();            
         });
-
-
     }
 }
 

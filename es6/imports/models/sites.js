@@ -1,25 +1,23 @@
 var mongoose = require('mongoose');
 
 var siteSchema = mongoose.Schema({
-    name: { type: String, required: true },
-    user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
-    created_at: { type: Date },
-	updated_at: { type: Date }
+  name: { type: String, required: true },
+  user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+  created_at: { type: Date },
+  updated_at: { type: Date }
 })
 
 siteSchema.set('toJSON', {
-     transform: function (doc, ret, options) {
-         ret.id = ret._id;
-         delete ret._id;
-         delete ret.__v;
-     }
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  }
 }); 
 
 // on every save, add the date
 siteSchema.pre('save', function(next) {
-
-console.log('pre save');
-
+  //console.log('pre save');
   // get the current date
   var currentDate = new Date();
   
@@ -30,6 +28,19 @@ console.log('pre save');
   if (!this.created_at)
     this.created_at = currentDate;
 
+  next();
+});
+
+siteSchema.pre('findOneAndUpdate', function(next) {
+  //console.log('pre findOneAndUpdate');
+  //this.updated_at = Date.now();
+  this.findOneAndUpdate({}, { updated_at: Date.now() });
+  next();
+});
+
+siteSchema.pre('update', function() {
+  //console.log('pre update');
+  this.updated_at = Date.now();
   next();
 });
 

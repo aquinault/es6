@@ -1,5 +1,4 @@
 import restify from 'restify';
-import co from 'co';
 import config from '../conf/config';
 import hitsController from '../controllers/hitsController';
 
@@ -14,62 +13,73 @@ class SitesApi{
     }
     init(server){
         server.get('/tracking/:site_id', (req, res, next) => {
-            co(function *(){
-                hitsController.updateTracking(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = hitsController.updateTracking(req);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
 
         server.get('/hits/:site_id/traffic/:date', (req, res, next) => {
-            co(function *(){
-                hitsController.getTraffic(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = hitsController.getTraffic(req.params.site_id, req.params.date);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
-
-
-
+        /*
         server.post('/hits/:id2', (req, res, next) => {
-            co(function *(){
-                hitsController.update(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = hitsController.update(req.params.id2);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
-
-        server.get('/hits/', (req, res, next) => {
-            co(function *(){
-                hitsController.list(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+        */
+        server.get('/hits/:user_id', (req, res, next) => {
+            let fn = hitsController.listByUserId(req.params.user_id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
 
         server.get('/hits/:id', (req, res, next) => {
-            co(function *(){
-                hitsController.get(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = hitsController.get(req.params.id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
 
-        /*server.put('/hits/:id', (req, res, next) => {
-            co(function *(){
-                hitsController.update(req, res, next);
-                return next();
-             }).catch(this.onerror);     
-        });*/
-
-
         server.del('/hits/', (req, res, next) => {
-            co(function *(){        
-                hitsController.removeAll(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = hitsController.removeAll();
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
 
         server.del('/hits/:id', (req, res, next) => {
-            co(function *(){        
-                hitsController.remove(req, res, next);
-                return next();
-             }).catch(this.onerror);     
+            let fn = hitsController.remove(req.params.id);
+            fn.then((results) => {
+                res.send(results);
+            }, (err) => {
+                res.send(422, err);
+            });
+            return next();
         });
     }
 }
