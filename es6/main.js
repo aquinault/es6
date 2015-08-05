@@ -1,5 +1,6 @@
 // main.js
 import config from './imports/conf/config';
+import logger from './imports/conf/logger';
 
 // Mongoose
 // ---------------------------------------------------------------
@@ -7,10 +8,10 @@ const mongoose = require('mongoose');
 mongoose.connect(config.mongo_url);
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-/* db.once('open', function () {
+db.on('error', (err) => {
+	logger.error( 'MongoDB:' + err);
 });
-*/
+
 // Restify
 // ---------------------------------------------------------------
 const restify = require('restify');
@@ -25,11 +26,11 @@ server.use(restify.bodyParser());
 server.pre(restify.pre.sanitizePath());
 
 server.listen(8080, () => {
-	console.log('%s listening at %s', server.name, server.url);
+	logger.info('%s listening at %s', server.name, server.url);
 });
 
 process.on('SIGINT', () => {
-	console.log('\nGracefully shutting down from SIGINT (Ctrl-C)');
+	logger.info('\nGracefully shutting down from SIGINT (Ctrl-C)');
 	// Disconnect Mongo
 	// service1.exit();
 	// some other closing procedures go here

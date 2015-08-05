@@ -1,3 +1,4 @@
+import logger from '../conf/logger';
 import restify from 'restify';
 import config from '../conf/config';
 import hitsController from '../controllers/hitsController';
@@ -5,11 +6,12 @@ import hitsController from '../controllers/hitsController';
 class SitesApi{
     constructor(server){
         this.name = 'Hits API!';
-        console.log("Init", this.name); //this == the object instance.
+        //console.log("Init", this.name); //this == the object instance.
+        logger.info("Init", this.name)
         this.init(server);
     }
     onerror(err) {
-        console.error(err.stack);
+        logger.error(err.stack);
     }
     init(server){
         server.get('/tracking/:site_id', (req, res, next) => {
@@ -21,8 +23,8 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                console.log(err);
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -32,7 +34,8 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -53,7 +56,8 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -63,7 +67,8 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -73,7 +78,8 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -83,7 +89,8 @@ class SitesApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });

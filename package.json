@@ -28,6 +28,7 @@
     "gulp-sourcemaps": "^1.5.2",
     "restify": "^3.0.3",
     "vinyl-source-stream": "^1.1.0",
+    "winston": "^1.0.1",
     "xo": "^0.5.0"
   },
   "xo": {

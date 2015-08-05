@@ -10,7 +10,7 @@ UserController.create = (username, password, email, admin) => {
   let user = new User({username: username, password: password, email: email, admin: admin});
   let fn = co(function* () {
     yield user.save().exec();
-    console.log('user saved');
+    logger.info('user saved');
     return user;
   });
   return fn;
@@ -25,7 +25,7 @@ UserController.get = (username, password) => {
     let secret = config.secret;
     let token = jwttoken.sign(results, secret);
 
-    console.log('user get');    
+    logger.info('user get');    
     return {'username': results.username, 'id' : results._id, 'email': results.email, 'admin': results.admin, 'token': token};
   });
   return fn;
@@ -34,7 +34,7 @@ UserController.get = (username, password) => {
 UserController.getById = (id) => {
   let fn = co(function* () {
     let results = yield User.findOne({_id: id}).exec();
-    console.log('user getById');
+    logger.info('user getById');
     return results;
   });
   return fn;
@@ -43,7 +43,7 @@ UserController.getById = (id) => {
 UserController.getByUsername = (username) => {
   let fn = co(function* () {
     let results = yield User.findOne({username: username}).exec();
-    console.log('user getByUsername');
+    logger.info('user getByUsername');
     return results;
   });
   return fn;
@@ -51,7 +51,7 @@ UserController.getByUsername = (username) => {
 
 UserController.list = () => {
   let fn = co(function* () {
-    console.log('users list');
+    logger.info('users list');
     let results = yield User.find().exec();   
     return results;
   });
@@ -73,7 +73,7 @@ UserController.update = (id, user) => {
 UserController.removeAll = () => {
   let fn = co(function* () {
     let results = yield User.remove().exec();
-    console.log('users removed');
+    logger.info('users removed');
     return results;
   });
   return fn;
@@ -82,7 +82,7 @@ UserController.removeAll = () => {
 UserController.remove = (id) => {
   let fn = co(function* () {
     let results = yield User.remove({'_id': id}).exec();
-    console.log('users removed');
+    logger.info('users removed');
     return results;
   });
   return fn;

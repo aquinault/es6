@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import logger from '../conf/logger';
 
 
 /*var bcrypt = require('bcrypt'),
@@ -24,7 +25,6 @@ userSchema.set('toJSON', {
 
 // on every save, add the date
 userSchema.pre('save', function(next) {
-  //console.log('save');
   // get the current date
   var currentDate = new Date();
   
@@ -39,14 +39,12 @@ userSchema.pre('save', function(next) {
 });
 
 userSchema.pre('findOneAndUpdate', function(next) {
-  //console.log('pre findOneAndUpdate');
   //this.updated_at = Date.now();
   this.findOneAndUpdate({}, { updated_at: Date.now() });
   next();
 });
 
 userSchema.pre('update', function(next) {
-  //console.log('pre update');
   this.updated_at = Date.now();
   next();
 });

@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import logger from '../conf/logger';
 
 /*var childVersionSchema = new mongoose.Schema({ 
   v: { type: String},
@@ -34,7 +35,6 @@ hitSchema.set('toJSON', {
 
 // on every save, add the date
 hitSchema.pre('save', function(next) {
-  // console.log('pre save');
   // get the current date
   var currentDate = new Date();
   
@@ -49,14 +49,12 @@ hitSchema.pre('save', function(next) {
 });
 
 hitSchema.pre('findOneAndUpdate', function(next) {
-  //console.log('pre findOneAndUpdate');
   //this.updated_at = Date.now();
   this.findOneAndUpdate({}, { updated_at: Date.now() });
   next();
 });
 
 hitSchema.pre('update', function(next) {
-  //console.log('pre update');
   this.updated_at = Date.now();
   next();
 });

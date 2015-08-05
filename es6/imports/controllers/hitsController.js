@@ -1,5 +1,6 @@
 'use strict';
 
+import logger from '../conf/logger';
 import mongoose from 'mongoose';
 import Hit from '../models/hits';
 import co from 'co';
@@ -10,11 +11,11 @@ let SitesController = {};
 // req.params.site_index
 SitesController.updateTracking = (site_id, ua) => {
   let fn = co(function* () {
-    //console.log({id2: req.params.site_id});
+    //logger.info({id2: req.params.site_id});
     var UAParser = require('ua-parser-js');
     var parser = new UAParser();
     //var ua = req.headers['user-agent'];     // user-agent header from an HTTP request
-    console.log(parser.setUA(ua).getResult());
+    logger.info(parser.setUA(ua).getResult());
 
     let resultParser = parser.setUA(ua).getResult();    
 
@@ -28,8 +29,8 @@ SitesController.updateTracking = (site_id, ua) => {
       min : (date.getMinutes() < 10 ? "0" : "") + date.getMinutes()
     }
     
-    console.log('a');
-    // console.log(currentTime);
+    logger.info('a');
+    // logger.info(currentTime);
     // And update id2 = user_id:year
     let update = {};  
     update['$inc'] = {};
@@ -42,28 +43,28 @@ SitesController.updateTracking = (site_id, ua) => {
     update['$setOnInsert']['created_at'] = date;
     update['$set']['date'] = currentTime.year;
 
-    console.log('b');
+    logger.info('b');
 
-    console.log('b1');
+    logger.info('b1');
     let id2 = site_id + ':' + currentTime.year;
-    console.log('b2');
-    console.log(id2);
-    console.log(update);
-    console.log(resultParser.os);
+    logger.info('b2');
+    logger.info(id2);
+    logger.info(update);
+    logger.info(resultParser.os);
 
     let results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
 
-    console.log('c');
+    logger.info('c');
 
     // update id2 = user_id-year-month
     update['$set']['date'] = currentTime.year + '-' + currentTime.month;
     id2 = id2 + '-' + currentTime.month;
 
-    console.log('c1');
+    logger.info('c1');
 
     results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
 
-    console.log('d');
+    logger.info('d');
 
     // update id2 = user_id:year-month-day
     update['$set']['date'] = currentTime.year + '-' + currentTime.month + '-' + currentTime.day;
@@ -80,7 +81,7 @@ SitesController.updateTracking = (site_id, ua) => {
     id2 = id2 + '-' + currentTime.min;
     results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
 
-    console.log('hit update');
+    logger.info('hit update');
     return results;
   });
   return fn;
@@ -102,7 +103,7 @@ SitesController.getTraffic = (site_id, date) => {
 SitesController.listBySiteId = (site_id) => {
   let fn = co(function* () {
     let results = yield Hit.find({id2: { $regex: '^' + site_id }}).exec();
-    console.log('hits list');
+    logger.info('hits list');
     return results;
   });
   return fn;
@@ -112,7 +113,7 @@ SitesController.listBySiteId = (site_id) => {
 SitesController.get = (id) => {
   let fn = co(function* () {
     let results = yield Hit.findOne({'_id': id}).exec();
-    console.log('hit get');
+    logger.info('hit get');
     return results;
   });
   return fn
@@ -121,7 +122,7 @@ SitesController.get = (id) => {
 SitesController.removeAll = () => {
   let fn = co(function* () {
     let results = yield Hit.remove().exec();
-    console.log('hits removed');
+    logger.info('hits removed');
     return results;
   });
   return fn;
@@ -131,7 +132,7 @@ SitesController.removeAll = () => {
 SitesController.remove = (id) => {
   let fn = co(function* () {
     let results = yield Hit.remove({'_id': id}).exec();
-    console.log('hits removed');
+    logger.info('hits removed');
     return results;
   });
   return fn;

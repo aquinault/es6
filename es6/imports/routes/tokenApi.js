@@ -1,3 +1,4 @@
+import logger from '../conf/logger';
 import restify from 'restify';
 import co from 'co';
 import config from '../conf/config';
@@ -8,11 +9,11 @@ let jwt = require('restify-jwt');
 class TokenApi{
     constructor(server){
         this.name = 'Token API!';
-        console.log("Init", this.name); //this == the object instance.
+        logger.info("Init", this.name); //this == the object instance.
         this.init(server);
     }
     onerror(err) {
-        console.error(err.stack);
+        logger.error(err.stack);
     }
     init(server){
         // Verify and Decode Token
@@ -30,17 +31,16 @@ class TokenApi{
             let secret = config.secret;
             let decoded = jwttoken.verify(req.body.token, secret, (err, decoded) => {
                 if(err) {
-                    console.log('Token invalid');
-                    res.send(422, err);
+                    logger.error('Token invalid')
+                    logger.error(err.stack);
+                    res.send(422, config.error_msg);
                 } else {
-                    console.log('Token valid');
-                    //console.log(decoded);
+                    logger.info('Token valid')
                     res.send(decoded);
                     return next();  
                 }
             }); 
         });
-
 
         /*
         server.get('/token', (req, res) => {
@@ -54,14 +54,12 @@ class TokenApi{
 
         server.get('/protected', jwt({secret: config.secret}), function(req, res) {
             /* req.headers.authorization = 'Bearer ' + token;*/
-            console.log(req.user);
+            //console.log(req.user);
+            logger.info(req.user);
             res.send(req.user);
             /*if (!req.user.admin) return res.send(401);
             res.send(200);*/
           });
-
-
-
     }
 }
 

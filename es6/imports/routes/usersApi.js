@@ -1,23 +1,24 @@
+import logger from '../conf/logger';
 import restify from 'restify';
 import userController from '../controllers/usersController'
 class UsersApi{
     constructor(server){
         this.name = 'Users API!';
-        console.log("Init", this.name); //this == the object instance.
+        logger.info("Init", this.name); //this == the object instance.
         this.init(server);
     }
     onerror(err) {
-        console.error(err.stack);
+        logger.error(err.stack);
     }
     init(server){
-
         // Get Users
         server.get('/auth/users/', (req, res, next) => {
             let fn = userController.list();
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -28,7 +29,8 @@ class UsersApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -39,7 +41,8 @@ class UsersApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -51,20 +54,20 @@ class UsersApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
 
         // Delete user
         server.del('/auth/user/:id', (req, res, next) => {
-            console.log(req);
-            console.log(req.params.id);
             let fn = userController.remove(req.params.id);
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
@@ -72,13 +75,13 @@ class UsersApi{
         // Update User
         server.put('/auth/users/:id', (req, res, next) => {           
             let fn = userController.update(req.params.id, req.body);
-            console.log(fn);
             fn.then((results) => {
-                console.log('user update OK');
+                logger.info('user update OK');
                 res.send(results);
             }, (err) => {
-                console.log('user update KO');
-                res.send(422, err);
+                logger.error('user update KO');
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
 
             return next();
@@ -90,7 +93,8 @@ class UsersApi{
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
-                res.send(422, err);
+                logger.error(err.stack);
+                res.send(422, config.error_msg);
             });
             return next();
         });
