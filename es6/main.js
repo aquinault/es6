@@ -27,6 +27,8 @@ server.pre(restify.pre.sanitizePath());
 
 server.listen(8080, () => {
 	logger.info('%s listening at %s', server.name, server.url);
+	//import document from './document';
+	require('./document')(server.router.mounts);
 });
 
 process.on('SIGINT', () => {
