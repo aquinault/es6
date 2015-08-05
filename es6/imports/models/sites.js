@@ -38,7 +38,7 @@ siteSchema.pre('findOneAndUpdate', function(next) {
   next();
 });
 
-siteSchema.pre('update', function() {
+siteSchema.pre('update', function(next) {
   //console.log('pre update');
   this.updated_at = Date.now();
   next();

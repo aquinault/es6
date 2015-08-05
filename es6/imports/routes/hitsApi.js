@@ -13,7 +13,11 @@ class SitesApi{
     }
     init(server){
         server.get('/tracking/:site_id', (req, res, next) => {
-            let fn = hitsController.updateTracking(req);
+
+            let ua = req.headers['user-agent']; 
+            let site_id = req.params.site_id;
+
+            let fn = hitsController.updateTracking(site_id, ua);
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
@@ -43,8 +47,9 @@ class SitesApi{
             return next();
         });
         */
-        server.get('/hits/:user_id', (req, res, next) => {
-            let fn = hitsController.listByUserId(req.params.user_id);
+
+        server.get('/hits/bySiteId/:site_id', (req, res, next) => {
+            let fn = hitsController.listBySiteId(req.params.site_id);
             fn.then((results) => {
                 res.send(results);
             }, (err) => {

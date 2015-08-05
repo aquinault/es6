@@ -55,7 +55,7 @@ hitSchema.pre('findOneAndUpdate', function(next) {
   next();
 });
 
-hitSchema.pre('update', function() {
+hitSchema.pre('update', function(next) {
   //console.log('pre update');
   this.updated_at = Date.now();
   next();

@@ -8,12 +8,12 @@ let SitesController = {};
 
 
 // req.params.site_index
-SitesController.updateTracking = (req) => {
+SitesController.updateTracking = (site_id, ua) => {
   let fn = co(function* () {
     //console.log({id2: req.params.site_id});
     var UAParser = require('ua-parser-js');
     var parser = new UAParser();
-    var ua = req.headers['user-agent'];     // user-agent header from an HTTP request
+    //var ua = req.headers['user-agent'];     // user-agent header from an HTTP request
     console.log(parser.setUA(ua).getResult());
 
     let resultParser = parser.setUA(ua).getResult();    
@@ -34,7 +34,7 @@ SitesController.updateTracking = (req) => {
     let update = {};  
     update['$inc'] = {};
     update['$inc']['views'] = 1;
-    update['$inc']['b.'+ resultParser.browser.name +'.' + resultParser.browser.major] = 1;
+    update['$inc']['b.'+ resultParser.browser.name.replace(' ', '_') +'.' + resultParser.browser.major] = 1;
     update['$inc']['p.'+ resultParser.os.name.replace(' ', '_') +'.' + resultParser.os.version] = 1;
     update['$set'] = {};
     update['$set']['updated_at'] = date;
@@ -45,7 +45,7 @@ SitesController.updateTracking = (req) => {
     console.log('b');
 
     console.log('b1');
-    let id2 = req.params.site_id + ':' + currentTime.year;
+    let id2 = site_id + ':' + currentTime.year;
     console.log('b2');
     console.log(id2);
     console.log(update);
@@ -86,110 +86,22 @@ SitesController.updateTracking = (req) => {
   return fn;
 };
 
+// https://openclassrooms.com/courses/concevez-votre-site-web-avec-php-et-mysql/memento-des-expressions-regulieres
+// RegEx  ^site_id:2014-08-10  -> year, month, day, hour 
+// .{2,4}$ End with 2, 3 or 4 caracters 
 SitesController.getTraffic = (site_id, date) => {
   let fn = co(function* () {
-    console.log({site_id:  site_id});
-    console.log({date :  date});
-
-    //let site_id = req.params.site_id;
-    let [year, month, day, hour, min] = date.split('-');
-
-    const BY_YEAR = Symbol();
-    const BY_MONTH = Symbol();
-    const BY_DAY = Symbol();
-    const BY_HOUR = Symbol();
-    const BY_MINUTE = Symbol();
-    
-    let currentType = {  
-        [BY_YEAR]: 0,
-        [BY_MONTH]: 1,
-        [BY_DAY]: 2,
-        [BY_HOUR]: 3,
-        [BY_MINUTE]: 4
-    };
-
-    let currLength = date.split('-').length;
-
-    let i = 0, results = {};
-    switch(currLength) {          
-
-      case currentType[BY_MINUTE]:
-      console.log("BY_MINUTE");
-      let minutes = Array.from(new Array(60), (x,i) => site_id + ':' + year + '-' + month + '-' + day + '-' + hour + '-' + (i < 10 ? "0" : "") + i);
-      console.log(minutes);
-      results = yield Hit.find({'id2': { $in : minutes } }).select('-id2').select('-_id').exec();
-      return results;
-      break;
-
-      case currentType[BY_HOUR]:
-      console.log("BY_HOUR");
-      let hours = Array.from(new Array(24), (x,i) => site_id + ':' + year + '-' + month + '-' + day + '-' + (i < 10 ? "0" : "") + i);
-      console.log(hours);
-      results = yield Hit.find({'id2': { $in : hours } }).select('-id2').select('-_id').exec();
-      return results;
-      break;
-
-      case currentType[BY_DAY]:
-      console.log("BY_DAY");
-      let days = Array.from(new Array(31), (x,i) => site_id + ':' + year + '-' + month + '-' + ( (i+1) < 10 ? "0" : "") + (i+1) );
-      console.log(days);
-      results = yield Hit.find({'id2': { $in : days } }).select('-id2').select('-_id').exec();
-      return results;
-      break;
-
-      case currentType[BY_MONTH]:
-      console.log("BY_MONTH");
-      let months = Array.from(new Array(12), (x,i) => site_id + ':' + year + '-' + ((i + 1) < 10 ? "0" : "") + (i + 1) );
-      console.log(months);
-      results = yield Hit.find({'id2': { $in : months } }).select('-id2').select('-_id').exec();
-      return results;
-      break;
-
-      case currentType[BY_YEAR]:
-      console.log("BY_YEAR");
-      let years = Array.from(new Array(10), (x,i) => site_id + ':' + ("201" + i) );
-      console.log(years);
-      results = yield Hit.find({'id2': { $in : years } }).select('-id2').select('-_id').exec();
-      return results;
-      break;
-
-    }
-
+    let results = yield Hit.find({id2: { $regex: '^' + site_id + ':' + date + '-.{2,4}$'}}).exec();
+    return results;
   });
   return fn;
 };
 
-// req.params.id2
-// req.body.name
-/*
-SitesController.update = (id2) => {
-  Co(function* () {
-    //{new: true} option return the modified object
-    let data = {
-      id2: id2,
-      browser_name: 'browser',
-      platform: 'platform',
-      site_id: new mongoose.Types.ObjectId(123),
-      user_id: new mongoose.Types.ObjectId(123),
-    };
-    console.log(data);
-    console.log({id2: id2});
-
-    let results = yield Hit.update( {id2: id2} ,{$inc: {visit: 1}}, {upsert: true}).exec();
-    console.log('hit get');
-    res.send(results);
-  }).then(() => {
-    res.send(201)
-  }, (err) => {
-    res.send(422, err);
-  }).then(next);
-};
-*/
-
 // req.params.user_id
-SitesController.listByUserId = (user_id) => {
+// RegEx  ^site_id -> start with side_id 
+SitesController.listBySiteId = (site_id) => {
   let fn = co(function* () {
-    let results = yield Hit.find({user_id: user_id}).exec();
+    let results = yield Hit.find({id2: { $regex: '^' + site_id }}).exec();
     console.log('hits list');
     return results;
   });
