@@ -1,5 +1,6 @@
 'use strict';
 
+import logger from '../conf/logger';
 import config from "./config";
 import User from '../models/users';
 import Site from '../models/sites';
@@ -12,7 +13,9 @@ var mongoose = require('mongoose');
 mongoose.connect(config.mongo_url);
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', (err) => {
+  logger.error( 'MongoDB:' + err);
+});
 db.once('open', function (callback) {
   // yay!
 });
@@ -28,21 +31,21 @@ let users = [{
 
  Co(function* () {
   yield User.remove();
-  console.log('users removed');
+  logger.info('users removed');
 
   yield Site.remove();
-  console.log('sites removed');
+  logger.info('sites removed');
    
   for(let i = 0; i<users.length; i++) {
     // User
   	let user = new User(users[i]);
   	yield user.save();
-  	console.log('user saved : ' + user.username);
+  	logger.info('user saved : ' + user.username);
 
     // User's site
     let site = new Site({name: 'site_' + user.username , user_id: mongoose.Types.ObjectId(user._id)});
     yield site.save();
-    console.log('site saved : ' + site.name);
+    logger.info('site saved : ' + site.name);
 	}
 
 	// Faker users	https://github.com/marak/Faker.js/
@@ -50,20 +53,20 @@ let users = [{
     // User
   	let user = new User({username: faker.internet.userName(), password: faker.internet.password(), email: faker.internet.email(), admin: false});
   	yield user.save();
-  	console.log('user saved : ' + user.username);
+  	logger.info('user saved : ' + user.username);
 
     // User's site
     let site = new Site({name: 'site_' + user.username , user_id: mongoose.Types.ObjectId(user._id)});
     yield site.save();
-    console.log('site saved : ' + site.name);
+    logger.info('site saved : ' + site.name);
 	}
 
 	return 'Well done!';
   }).then((value) => {
-    console.log(value);
+    logger.info(value);
     mongoose.connection.close();
   }, (err) => {
-    console.log(err);
+    logger.error(err.stack);
     mongoose.connection.close();
 });
 
