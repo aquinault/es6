@@ -10,7 +10,7 @@ let UserController = {};
 UserController.create = (username, password, email, admin) => {
   let user = new User({username: username, password: password, email: email, admin: admin});
   let fn = co(function* () {
-    yield user.save().exec();
+    yield user.save();
     logger.info('user saved');
     return user;
   });
@@ -19,7 +19,14 @@ UserController.create = (username, password, email, admin) => {
 
 UserController.get = (username, password) => {
   let fn = co(function* () {
+
     let results = yield User.findOne({username: username, password: password}).exec();
+    console.log('---------');
+    console.log(results);
+    console.log('---------');
+    if(!results) {
+      return {'code': 401};
+    }
 
     // Generate Token
     let jwttoken = require('jsonwebtoken');    

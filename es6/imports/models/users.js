@@ -6,12 +6,12 @@ import logger from '../conf/logger';
     SALT_WORK_FACTOR = 10;*/
 
 var userSchema = mongoose.Schema({
-	username: { type: String, required: true, index: { unique: true } },
+	  username: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true },
     email: { type: String, required: false },
     admin: { type: Boolean, default: false },
     created_at: Date,
-	updated_at: Date
+	  updated_at: Date
 })
 
 userSchema.set('toJSON', {

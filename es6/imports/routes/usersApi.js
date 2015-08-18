@@ -89,9 +89,16 @@ class UsersApi{
 
         // Login User
         server.post('/api/auth/login/', (req, res, next) => {
-            let fn = userController.get(req.body.username, req.body.password);
+            //let fn = userController.get(req.body.username, req.body.password);
+            let fn = userController.get(req.params.username, req.params.password);
             fn.then((results) => {
-                res.send(results);
+                if(results.code) {
+                    if(results.code === 401) {
+                        res.send(401, 'Not authenticated');
+                    }
+                } else {
+                    res.send(results);
+                }
             }, (err) => {
                 logger.error(err.stack);
                 res.send(422, config.error_msg);

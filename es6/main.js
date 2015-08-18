@@ -26,7 +26,7 @@ const server = restify.createServer({
 });
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
-server.use(restify.bodyParser());
+server.use(restify.bodyParser({ mapParams: true }));
 server.pre(restify.pre.sanitizePath());
 
 server.listen(3000, () => {
