@@ -3,6 +3,7 @@
 import User from '../models/users';
 import co from 'co';
 import config from "../conf/config";
+import logger from '../conf/logger';
 
 let UserController = {};
 

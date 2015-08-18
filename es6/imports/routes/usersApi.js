@@ -12,7 +12,7 @@ class UsersApi{
     }
     init(server){
         // Get Users
-        server.get('/auth/users/', (req, res, next) => {
+        server.get('/api/auth/users/', (req, res, next) => {
             let fn = userController.list();
             fn.then((results) => {
                 res.send(results);
@@ -24,7 +24,7 @@ class UsersApi{
         });
 
         // Get User by id
-        server.get('/auth/users/byId/:id', (req, res, next) => {
+        server.get('/api/auth/users/byId/:id', (req, res, next) => {
             let fn = userController.getById(req.params.id);
             fn.then((results) => {
                 res.send(results);
@@ -36,7 +36,7 @@ class UsersApi{
         });
 
         // Get User by username
-        server.get('/auth/users/byUsername/:username', (req, res, next) => {
+        server.get('/api/auth/users/byUsername/:username', (req, res, next) => {
             let fn = userController.getByUsername(req.params.username);
             fn.then((results) => {
                 res.send(results);
@@ -48,7 +48,7 @@ class UsersApi{
         });
 
         // Create user
-        server.post('/auth/user/', (req, res, next) => {
+        server.post('/api/auth/user/', (req, res, next) => {
             let admin = false; // User privilege
             let fn = userController.create(req.body.username, req.body.password, req.body.email, admin);
             fn.then((results) => {
@@ -61,7 +61,7 @@ class UsersApi{
         });
 
         // Delete user
-        server.del('/auth/user/:id', (req, res, next) => {
+        server.del('/api/auth/user/:id', (req, res, next) => {
             let fn = userController.remove(req.params.id);
             fn.then((results) => {
                 res.send(results);
@@ -73,7 +73,7 @@ class UsersApi{
         });
 
         // Update User
-        server.put('/auth/users/:id', (req, res, next) => {           
+        server.put('/api/auth/users/:id', (req, res, next) => {           
             let fn = userController.update(req.params.id, req.body);
             fn.then((results) => {
                 logger.info('user update OK');
@@ -88,7 +88,7 @@ class UsersApi{
         });
 
         // Login User
-        server.post('/auth/login/', (req, res, next) => {
+        server.post('/api/auth/login/', (req, res, next) => {
             let fn = userController.get(req.body.username, req.body.password);
             fn.then((results) => {
                 res.send(results);

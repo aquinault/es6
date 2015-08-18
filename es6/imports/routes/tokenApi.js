@@ -17,7 +17,7 @@ class TokenApi{
     }
     init(server){
         // Verify and Decode Token
-        server.post('/auth/token/decode/', (req, res) => {
+        server.post('/api/auth/token/decode/', (req, res) => {
             let secret = config.secret;
             let decoded = jwttoken.decode(req.body.token, {complete: true});
             //console.log(decoded);
@@ -27,7 +27,7 @@ class TokenApi{
         });
 
         // Decode Token
-        server.post('/auth/token/verify/', (req, res) => {
+        server.post('/api/auth/token/verify/', (req, res) => {
             let secret = config.secret;
             let decoded = jwttoken.verify(req.body.token, secret, (err, decoded) => {
                 if(err) {
@@ -52,7 +52,7 @@ class TokenApi{
           });
         */
 
-        server.get('/protected', jwt({secret: config.secret}), function(req, res) {
+        server.get('/api/protected', jwt({secret: config.secret}), function(req, res) {
             /* req.headers.authorization = 'Bearer ' + token;*/
             //console.log(req.user);
             logger.info(req.user);

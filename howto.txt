@@ -1,4 +1,10 @@
 mongod --dbpath d:\code\mongo\data
+or for cloud 9
+$ mkdir data
+$ echo 'mongod --bind_ip=$IP --dbpath=data --nojournal --rest --smallfiles "$@"' > mongod
+$ chmod a+x mongod
+
+
 
 DELETE
 curl -i -H "Accept: application/json" -X DELETE http://localhost:8080/posts/

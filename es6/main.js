@@ -2,6 +2,10 @@
 import config from './imports/conf/config';
 import logger from './imports/conf/logger';
 
+// Proxy
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createProxyServer(); 
+
 // Mongoose
 // ---------------------------------------------------------------
 const mongoose = require('mongoose');
@@ -25,7 +29,7 @@ server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.pre(restify.pre.sanitizePath());
 
-server.listen(8080, () => {
+server.listen(3000, () => {
 	logger.info('%s listening at %s', server.name, server.url);
 	//import document from './document';
 	require('./document')(server.router.mounts);
@@ -58,3 +62,6 @@ let sitesApi = new SitesApi(server);
 // ---------------------------------------------------------------
 import HitsApi from './imports/routes/hitsApi';
 let hitsApi = new HitsApi(server);
+
+
+

@@ -3,6 +3,7 @@
 import mongoose from 'mongoose';
 import Site from '../models/sites';
 import co from 'co';
+import logger from '../conf/logger';
 
 let SitesController = {};
 

@@ -13,7 +13,7 @@ class SitesApi{
         logger.error(err.stack);
     }
     init(server){
-        server.get('/sites/byUserId/:user_id', (req, res, next) => {
+        server.get('/api/sites/byUserId/:user_id', (req, res, next) => {
             let fn = sitesController.list(req.params.user_id);
             fn.then((results) => {
                 res.send(results);
@@ -24,7 +24,7 @@ class SitesApi{
             return next();            
         });
 
-        server.get('/sites/:id', (req, res, next) => {
+        server.get('/api/sites/:id', (req, res, next) => {
             let fn = sitesController.get(req.params.id);
             fn.then((results) => {
                 res.send(results);
@@ -35,7 +35,7 @@ class SitesApi{
             return next();            
         });
 
-        server.put('/sites/:id', (req, res, next) => {
+        server.put('/api/sites/:id', (req, res, next) => {
             let fn = sitesController.update(req.params.id, req.body);
             fn.then((results) => {
                 res.send(results);
@@ -46,7 +46,7 @@ class SitesApi{
             return next();            
         });
 
-        server.del('/sites/', (req, res, next) => {
+        server.del('/api/sites/', (req, res, next) => {
             let fn = sitesController.removeAll();
             fn.then((results) => {
                 res.send(results);
@@ -57,7 +57,7 @@ class SitesApi{
             return next();            
         });
 
-        server.del('/sites/:id', (req, res, next) => {
+        server.del('/api/sites/:id', (req, res, next) => {
             let fn = sitesController.remove(id);
             fn.then((results) => {
                 res.send(results);
@@ -68,7 +68,7 @@ class SitesApi{
             return next();            
         });
 
-        server.post('/sites/', (req, res, next) => {
+        server.post('/api/sites/', (req, res, next) => {
             let fn = sitesController.create(req.body.name, req.body.user_id);
             fn.then((results) => {
                 res.send(results);
