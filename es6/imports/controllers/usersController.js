@@ -17,6 +17,47 @@ UserController.create = (username, password, email, admin) => {
   return fn;
 };
 
+
+// Json Api Ref implementation : https://google-styleguide.googlecode.com/svn/trunk/jsoncstyleguide.xml
+UserController.get = (username, password) => {
+  let fn = co(function* () {
+    let results = yield User.findOne({username: username, password: password}).exec();
+    if(!results) {
+      let json = {
+        "apiVersion": "0.1",
+        "error": {
+          "code": 401,
+          "message": "Authentication failed",
+          "errors": [{
+            "domain": "Auth",
+            "message": "Username / Password not found"
+          }]          
+        }
+      };
+      return json;
+    }
+
+    // Generate Token
+    let jwttoken = require('jsonwebtoken');    
+    let secret = config.secret;
+    let token = jwttoken.sign(results, secret);
+    logger.info('user get');    
+    let json = {
+      "apiVersion": "0.1",
+      "data": {
+        "id" : results._id,
+        "message": "User authenticated",
+        "username": results.username,
+        "email": results.email,
+        "admin": results.admin, 
+        "token": token
+      }
+    };
+    return json;
+  });
+  return fn;
+};
+/*
 UserController.get = (username, password) => {
   let fn = co(function* () {
 
@@ -38,7 +79,7 @@ UserController.get = (username, password) => {
   });
   return fn;
 };
-
+*/
 UserController.getById = (id) => {
   let fn = co(function* () {
     let results = yield User.findOne({_id: id}).exec();

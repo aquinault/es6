@@ -92,16 +92,26 @@ class UsersApi{
             //let fn = userController.get(req.body.username, req.body.password);
             let fn = userController.get(req.params.username, req.params.password);
             fn.then((results) => {
-                if(results.code) {
-                    if(results.code === 401) {
-                        res.send(401, 'Not authenticated');
-                    }
+                if(results.error) {
+                    res.send(401, results);
                 } else {
                     res.send(results);
                 }
             }, (err) => {
                 logger.error(err.stack);
-                res.send(422, config.error_msg);
+                
+                let json = {
+                    "apiVersion": "0.1",
+                    "error": {
+                        "code": 422,
+                        "message": "Authentication failed",
+                        "errors": [{
+                            "domain": "Auth",
+                            "message": config.error_msg
+                      }]          
+                    }
+                };
+                res.send(422, json);
             });
             return next();
         });
