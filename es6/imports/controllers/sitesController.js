@@ -10,7 +10,8 @@ let SitesController = {};
 SitesController.create = (name, user_id) => {
   let site = new Site({name: name, user_id: mongoose.Types.ObjectId(user_id)});
   let fn = co(function* () {
-    yield site.save().exec();
+    //yield site.save().exec();
+    yield site.save();
     logger.info('site saved');
     return site;
   });

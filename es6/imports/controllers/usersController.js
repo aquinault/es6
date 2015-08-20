@@ -4,6 +4,8 @@ import User from '../models/users';
 import co from 'co';
 import config from "../conf/config";
 import logger from '../conf/logger';
+import responseFormatter from '../utils/responseFormatter';
+
 
 let UserController = {};
 
@@ -23,6 +25,9 @@ UserController.get = (username, password) => {
   let fn = co(function* () {
     let results = yield User.findOne({username: username, password: password}).exec();
     if(!results) {
+      let json = responseFormatter.error('0.1', 'Authentication failed', {"domain" : "Auth", 
+                                                                          "message" : "Username / Password not found"});
+      /*
       let json = {
         "apiVersion": "0.1",
         "error": {
@@ -33,7 +38,7 @@ UserController.get = (username, password) => {
             "message": "Username / Password not found"
           }]          
         }
-      };
+      }; */
       return json;
     }
 
@@ -42,6 +47,14 @@ UserController.get = (username, password) => {
     let secret = config.secret;
     let token = jwttoken.sign(results, secret);
     logger.info('user get');    
+    
+    let json = responseFormatter.data('0.1', {"id" : results._id, 
+                                              "message" : "User authenticated", 
+                                              "username": results.username,
+                                              "email": results.email,
+                                              "admin": results.admin, 
+                                              "token": token });
+    /*
     let json = {
       "apiVersion": "0.1",
       "data": {
@@ -53,6 +66,7 @@ UserController.get = (username, password) => {
         "token": token
       }
     };
+    */
     return json;
   });
   return fn;

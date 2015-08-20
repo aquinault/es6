@@ -9,7 +9,7 @@ let SitesController = {};
 
 
 // req.params.site_index
-SitesController.updateTracking = (site_id, ua) => {
+SitesController.updateTracking = (site_id, ua, date) => {
   let fn = co(function* () {
     //logger.info({id2: req.params.site_id});
     var UAParser = require('ua-parser-js');
@@ -20,7 +20,7 @@ SitesController.updateTracking = (site_id, ua) => {
     let resultParser = parser.setUA(ua).getResult();    
 
     // Get current year, month, day
-    var date = new Date();
+    //var date = new Date();
     let currentTime = {
       year : date.getFullYear().toString(),
       month : ((date.getMonth() + 1) < 10 ? "0" : "") + (date.getMonth() + 1),

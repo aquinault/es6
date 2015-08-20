@@ -1,6 +1,8 @@
 import logger from '../conf/logger';
 import restify from 'restify';
 import userController from '../controllers/usersController'
+import responseFormatter from '../utils/responseFormatter';
+
 class UsersApi{
     constructor(server){
         this.name = 'Users API!';
@@ -100,6 +102,11 @@ class UsersApi{
             }, (err) => {
                 logger.error(err.stack);
                 
+                let json = responseFormatter.error( '0.1', 
+                                                    'Authentication failed', 
+                                                    {"domain" : "Auth", "message" : config.error_msg});
+
+                /*
                 let json = {
                     "apiVersion": "0.1",
                     "error": {
@@ -110,7 +117,7 @@ class UsersApi{
                             "message": config.error_msg
                       }]          
                     }
-                };
+                }; */
                 res.send(422, json);
             });
             return next();

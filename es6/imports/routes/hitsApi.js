@@ -18,8 +18,9 @@ class SitesApi{
 
             let ua = req.headers['user-agent']; 
             let site_id = req.params.site_id;
+            let date = new Date();
 
-            let fn = hitsController.updateTracking(site_id, ua);
+            let fn = hitsController.updateTracking(site_id, ua, date);
             fn.then((results) => {
                 res.send(results);
             }, (err) => {
