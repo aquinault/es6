@@ -6,7 +6,6 @@ import config from "../conf/config";
 import logger from '../conf/logger';
 import responseFormatter from '../utils/responseFormatter';
 
-
 let UserController = {};
 
 UserController.create = (username, password, email, admin) => {
@@ -14,11 +13,12 @@ UserController.create = (username, password, email, admin) => {
   let fn = co(function* () {
     yield user.save();
     logger.info('user saved');
+    
     return user;
   });
+  
   return fn;
 };
-
 
 // Json Api Ref implementation : https://google-styleguide.googlecode.com/svn/trunk/jsoncstyleguide.xml
 UserController.get = (username, password) => {
@@ -67,8 +67,10 @@ UserController.get = (username, password) => {
       }
     };
     */
+    
     return json;
   });
+  
   return fn;
 };
 /*
@@ -98,8 +100,10 @@ UserController.getById = (id) => {
   let fn = co(function* () {
     let results = yield User.findOne({_id: id}).exec();
     logger.info('user getById');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -107,8 +111,10 @@ UserController.getByUsername = (username) => {
   let fn = co(function* () {
     let results = yield User.findOne({username: username}).exec();
     logger.info('user getByUsername');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -116,8 +122,10 @@ UserController.list = () => {
   let fn = co(function* () {
     logger.info('users list');
     let results = yield User.find().exec();   
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -128,8 +136,10 @@ UserController.update = (id, user) => {
     newUser.email = user.email;
 
     let results = yield User.findByIdAndUpdate(id, { $set: newUser}, {new: true}).exec();
+    
     return results;   
   });
+  
   return fn;
 };
 
@@ -137,8 +147,10 @@ UserController.removeAll = () => {
   let fn = co(function* () {
     let results = yield User.remove().exec();
     logger.info('users removed');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -146,10 +158,11 @@ UserController.remove = (id) => {
   let fn = co(function* () {
     let results = yield User.remove({'_id': id}).exec();
     logger.info('users removed');
+    
     return results;
   });
+  
   return fn;
 };
-
 
 export default UserController;

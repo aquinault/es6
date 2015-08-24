@@ -1,11 +1,12 @@
 import restify from 'restify';
 
-class Api{
-    constructor(debug = false){
+class Api {
+    constructor(debug = false) {
         this.name = 'Social API!';
         console.log("Loading ", this.name); //this == the object instance.
     }
-    init(){
+    
+    init() {
 		let server = restify.createServer({
 		  name: 'myapp',
 		  version: '1.0.0'
@@ -20,22 +21,13 @@ class Api{
 		  console.log('%s listening at %s', server.name, server.url);
 		});       
     }
-    _api1(server){
-    	/*
-		server.get('/echo/:name', function (req, res, next) {
-		  res.send(req.params); 
-		  return next();
-		});*/
-
+    
+    _api1(server) {
 		server.get('/echo/:name', (req, res, next) => {
 		  res.send(req.params); 
 		  return next();
 		});
-
-
-
     }
-	
 }
 
 module.exports = Api; //set what can be imported from this file

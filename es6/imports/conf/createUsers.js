@@ -20,7 +20,6 @@ db.once('open', function (callback) {
   // yay!
 });
 
-
 let users = [{
     username: 'admin', password: 'admin', email: 'admin@admin.fr', admin: true
   }, {
@@ -69,5 +68,3 @@ let users = [{
     logger.error(err.stack);
     mongoose.connection.close();
 });
-
-  

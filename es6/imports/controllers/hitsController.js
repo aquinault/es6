@@ -7,7 +7,6 @@ import co from 'co';
 
 let SitesController = {};
 
-
 // req.params.site_index
 SitesController.updateTracking = (site_id, ua, date) => {
   let fn = co(function* () {
@@ -82,8 +81,10 @@ SitesController.updateTracking = (site_id, ua, date) => {
     results = yield Hit.update( {id2: id2} ,update, {upsert: true}).exec();
 
     logger.info('hit update');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -93,8 +94,10 @@ SitesController.updateTracking = (site_id, ua, date) => {
 SitesController.getTraffic = (site_id, date) => {
   let fn = co(function* () {
     let results = yield Hit.find({id2: { $regex: '^' + site_id + ':' + date + '-.{2,4}$'}}).exec();
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -104,8 +107,10 @@ SitesController.listBySiteId = (site_id) => {
   let fn = co(function* () {
     let results = yield Hit.find({id2: { $regex: '^' + site_id }}).exec();
     logger.info('hits list');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -114,8 +119,10 @@ SitesController.get = (id) => {
   let fn = co(function* () {
     let results = yield Hit.findOne({'_id': id}).exec();
     logger.info('hit get');
+    
     return results;
   });
+  
   return fn
 };
 
@@ -123,8 +130,10 @@ SitesController.removeAll = () => {
   let fn = co(function* () {
     let results = yield Hit.remove().exec();
     logger.info('hits removed');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -133,10 +142,11 @@ SitesController.remove = (id) => {
   let fn = co(function* () {
     let results = yield Hit.remove({'_id': id}).exec();
     logger.info('hits removed');
+    
     return results;
   });
+  
   return fn;
 };
-
 
 export default SitesController;

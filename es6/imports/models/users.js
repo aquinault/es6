@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import logger from '../conf/logger';
 
-
 /*var bcrypt = require('bcrypt'),
     SALT_WORK_FACTOR = 10;*/
 

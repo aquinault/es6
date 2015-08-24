@@ -11,8 +11,7 @@ for (var key in routes) {
     var _o = {};
     //_o[val.method]  = [val.name, val.spec.path ]; 
     _o[val.method]  = [val.spec.path ]; 
-	table.push(_o);
-	
+	  table.push(_o);
   }
 }
 console.log(table.toString());

@@ -6,15 +6,17 @@ import config from '../conf/config';
 let jwttoken = require('jsonwebtoken');
 let jwt = require('restify-jwt');
 
-class TokenApi{
-    constructor(server){
+class TokenApi {
+    constructor(server) {
         this.name = 'Token API!';
         logger.info("Init", this.name); //this == the object instance.
         this.init(server);
     }
+    
     onerror(err) {
         logger.error(err.stack);
     }
+    
     init(server){
         // Verify and Decode Token
         server.post('/api/auth/token/decode/', (req, res) => {
@@ -63,4 +65,4 @@ class TokenApi{
     }
 }
 
-module.exports = TokenApi; //set what can be imported from this file
+export default TokenApi;

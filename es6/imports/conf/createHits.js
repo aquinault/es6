@@ -23,8 +23,6 @@ db.once('open', function (callback) {
   // yay!
 });
 
-
-
 Co(function* () {
   
   // Get user aquinault

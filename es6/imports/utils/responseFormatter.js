@@ -2,7 +2,6 @@
 
 let ResponseFormatter = {};
 
-
 // ResponseFormatter.data('0.1', {"id" : "1234", "message" : "User authenticated", "username": "aquinault", ...});
 //
 ResponseFormatter.data = (apiVersion, data) => {

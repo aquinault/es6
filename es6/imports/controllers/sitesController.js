@@ -13,8 +13,10 @@ SitesController.create = (name, user_id) => {
     //yield site.save().exec();
     yield site.save();
     logger.info('site saved');
+    
     return site;
   });
+  
   return fn;
 };
 
@@ -22,8 +24,10 @@ SitesController.list = (user_id) => {
   let fn = co(function* () {
     let results = yield Site.find({user_id: user_id}).exec();
     logger.info('sites list');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -32,8 +36,10 @@ SitesController.get = (id) => {
   let fn = co(function* () {
     let results = yield Site.findOne({'_id': id}).exec();
     logger.info('site get');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -44,8 +50,10 @@ SitesController.update = (id, site) => {
     let newSite = {};
     newSite.name = site.name;
     let results = yield Site.findByIdAndUpdate(id, { $set: newSite}, {new: true}).exec();
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -53,8 +61,10 @@ SitesController.removeAll = () => {
   let fn = co(function* () {
     let results = yield Site.remove().exec();
     logger.info('sites removed');
+    
     return results;
   });
+  
   return fn;
 };
 
@@ -63,10 +73,11 @@ SitesController.remove = (id) => {
   let fn = co(function* () {
     let results = yield Site.remove({'_id': id}).exec();
     logger.info('sites removed');
+    
     return results;
   });
+  
   return fn;
 };
-
 
 export default SitesController;

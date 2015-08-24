@@ -3,16 +3,18 @@ import restify from 'restify';
 import userController from '../controllers/usersController'
 import responseFormatter from '../utils/responseFormatter';
 
-class UsersApi{
-    constructor(server){
+class UsersApi {
+    constructor(server) {
         this.name = 'Users API!';
         logger.info("Init", this.name); //this == the object instance.
         this.init(server);
     }
+    
     onerror(err) {
         logger.error(err.stack);
     }
-    init(server){
+    
+    init(server) {
         // Get Users
         server.get('/api/auth/users/', (req, res, next) => {
             let fn = userController.list();
@@ -22,6 +24,7 @@ class UsersApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
 
@@ -34,6 +37,7 @@ class UsersApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
 
@@ -46,6 +50,7 @@ class UsersApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
 
@@ -59,6 +64,7 @@ class UsersApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
 
@@ -71,6 +77,7 @@ class UsersApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
 
@@ -105,25 +112,12 @@ class UsersApi{
                 let json = responseFormatter.error( '0.1', 
                                                     'Authentication failed', 
                                                     {"domain" : "Auth", "message" : config.error_msg});
-
-                /*
-                let json = {
-                    "apiVersion": "0.1",
-                    "error": {
-                        "code": 422,
-                        "message": "Authentication failed",
-                        "errors": [{
-                            "domain": "Auth",
-                            "message": config.error_msg
-                      }]          
-                    }
-                }; */
                 res.send(422, json);
             });
+            
             return next();
         });
-
     }
 }
 
-module.exports = UsersApi; //set what can be imported from this file
+export default UsersApi;

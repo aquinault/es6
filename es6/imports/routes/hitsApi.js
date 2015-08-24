@@ -3,23 +3,23 @@ import restify from 'restify';
 import config from '../conf/config';
 import hitsController from '../controllers/hitsController';
 
-class SitesApi{
-    constructor(server){
+class HitsApi {
+    constructor(server) {
         this.name = 'Hits API!';
         //console.log("Init", this.name); //this == the object instance.
         logger.info("Init", this.name)
         this.init(server);
     }
+    
     onerror(err) {
         logger.error(err.stack);
     }
-    init(server){
+    
+    init(server) {
         server.get('/api/tracking/:site_id', (req, res, next) => {
-
             let ua = req.headers['user-agent']; 
             let site_id = req.params.site_id;
             let date = new Date();
-
             let fn = hitsController.updateTracking(site_id, ua, date);
             fn.then((results) => {
                 res.send(results);
@@ -27,6 +27,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
 
@@ -38,19 +39,9 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();
         });
-        /*
-        server.post('/hits/:id2', (req, res, next) => {
-            let fn = hitsController.update(req.params.id2);
-            fn.then((results) => {
-                res.send(results);
-            }, (err) => {
-                res.send(422, err);
-            });
-            return next();
-        });
-        */
 
         server.get('/api/hits/bySiteId/:site_id', (req, res, next) => {
             let fn = hitsController.listBySiteId(req.params.site_id);
@@ -60,6 +51,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+
             return next();
         });
 
@@ -71,6 +63,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+
             return next();
         });
 
@@ -82,6 +75,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+
             return next();
         });
 
@@ -93,9 +87,10 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+
             return next();
         });
     }
 }
 
-module.exports = SitesApi; //set what can be imported from this file
+export default HitsApi;

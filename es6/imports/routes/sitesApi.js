@@ -3,16 +3,18 @@ import restify from 'restify';
 import config from '../conf/config';
 import sitesController from '../controllers/sitesController';
 
-class SitesApi{
-    constructor(server){
+class SitesApi {
+    constructor(server) {
         this.name = 'Sites API!';
         logger.info("Init", this.name); //this == the object instance.
         this.init(server);
     }
+    
     onerror(err) {
         logger.error(err.stack);
     }
-    init(server){
+    
+    init(server) {
         server.get('/api/sites/byUserId/:user_id', (req, res, next) => {
             let fn = sitesController.list(req.params.user_id);
             fn.then((results) => {
@@ -21,6 +23,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();            
         });
 
@@ -32,6 +35,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();            
         });
 
@@ -43,6 +47,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();            
         });
 
@@ -54,6 +59,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();            
         });
 
@@ -65,6 +71,7 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();            
         });
 
@@ -76,9 +83,10 @@ class SitesApi{
                 logger.error(err.stack);
                 res.send(422, config.error_msg);
             });
+            
             return next();            
         });
     }
 }
 
-module.exports = SitesApi; //set what can be imported from this file
+export default SitesApi;
